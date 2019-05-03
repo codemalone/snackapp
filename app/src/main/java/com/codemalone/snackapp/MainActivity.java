@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -238,8 +239,24 @@ public class MainActivity extends AppCompatActivity implements MenuItemFragment.
     }
 
     private void showAddItemDialog() {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        AddItemDialogFragment newFragment = new AddItemDialogFragment();
-        newFragment.show(getSupportFragmentManager(), "addItem");
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setPositiveButton(R.string.button_add_item_save, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked OK button
+            }
+        });
+
+        builder.setNegativeButton(R.string.button_add_item_cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User cancelled the dialog
+            }
+        });
+        builder.setTitle(R.string.action_add_item);
+
+        // inflate xml layout
+        LayoutInflater inflater = getLayoutInflater();
+        builder.setView(inflater.inflate(R.layout.fragement_add_item, null));
+        builder.create().show();
     }
 }
