@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.codemalone.snackapp.dummy.ItemMenu;
 import com.codemalone.snackapp.dummy.Item;
 
 /**
@@ -42,7 +41,6 @@ public class MenuItemFragment extends Fragment {
         MenuItemFragment fragment = new MenuItemFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
-        args.putSerializable(ARG_MENU, new ItemMenu());
         fragment.setArguments(args);
         return fragment;
     }

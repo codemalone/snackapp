@@ -1,9 +1,10 @@
 <resources>
     <string name="app_name">Snack App</string>
     <string name="action_add_item">Add Menu Item</string>
+    <string name="menu_category_veggie">Veggie</string>
+    <string name="menu_category_non_veggie">Non-Veggie</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="veggie_frame_content">Veggie</string>
-    <string name="non_veggie_frame_content">Non-Veggie</string>
-    <string name="submit_frame_content">Submit Order</string>
+    <string name="category_content_veggie">Veggie</string>
+    <string name="category_content_non_veggie">Non-Veggie</string>
+    <string name="button_content_submit">Submit Order</string>
 </resources>

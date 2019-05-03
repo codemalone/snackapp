@@ -1,27 +1,21 @@
 package com.codemalone.snackapp;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.AttributeSet;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 
 import com.codemalone.snackapp.dummy.Item;
-import com.codemalone.snackapp.dummy.Order;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +36,9 @@ public class MainActivity extends AppCompatActivity implements MenuItemFragment.
         setSupportActionBar(toolbar);
 
         mMenu = createNewMenu();
+        initializeRecyclerView();
 
+        // set submit button action listener
         Button submit = findViewById(R.id.frame_content_submit);
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,10 +62,8 @@ public class MainActivity extends AppCompatActivity implements MenuItemFragment.
             }
         });
 
-        initializeRecyclerView();
-
         // set category checkbox listeners
-        CheckBox veggie = (CheckBox) findViewById(R.id.checkbox_category_veggie);
+        CheckBox veggie = findViewById(R.id.checkbox_category_veggie);
         veggie.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -77,27 +71,29 @@ public class MainActivity extends AppCompatActivity implements MenuItemFragment.
             }
         });
 
-        CheckBox nonVeggie = (CheckBox) findViewById(R.id.checkbox_category_non_veggie);
+        CheckBox nonVeggie = findViewById(R.id.checkbox_category_non_veggie);
         nonVeggie.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 changeCategoryVisibility(buttonView, isChecked);
             }
         });
-
     }
 
     private ArrayList<Item> createNewMenu() {
+        final String veggie = getString(R.string.category_content_veggie);
+        final String nonVeggie = getString(R.string.category_content_non_veggie);
+
         ArrayList<Item> newMenu = new ArrayList<>();
-        newMenu.add(new Item("French fries", "Veggie"));
-        newMenu.add(new Item("Veggieburger", "Veggie"));
-        newMenu.add(new Item("Carrots", "Veggie"));
-        newMenu.add(new Item("Apple", "Veggie"));
-        newMenu.add(new Item("Banana", "Veggie"));
-        newMenu.add(new Item("Milkshake", "Veggie"));
-        newMenu.add(new Item("Cheeseburger", "Non-Veggie"));
-        newMenu.add(new Item("Hamburger", "Non-Veggie"));
-        newMenu.add(new Item("Hot dog", "Non-Veggie"));
+        newMenu.add(new Item("Apple", veggie));
+        newMenu.add(new Item("Banana", veggie));
+        newMenu.add(new Item("Carrots", veggie));
+        newMenu.add(new Item("French fries", veggie));
+        newMenu.add(new Item("Milkshake", veggie));
+        newMenu.add(new Item("Veggieburger", veggie));
+        newMenu.add(new Item("Cheeseburger", nonVeggie));
+        newMenu.add(new Item("Hamburger", nonVeggie));
+        newMenu.add(new Item("Hot dog", nonVeggie));
         return newMenu;
     }
 
@@ -173,11 +169,8 @@ public class MainActivity extends AppCompatActivity implements MenuItemFragment.
         mAdapter.notifyDataSetChanged();
     }
 
-
-
-
     private void initializeRecyclerView() {
-        recyclerView = (RecyclerView) findViewById(R.id.frame_content_menu);
+        recyclerView = findViewById(R.id.frame_content_menu);
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
@@ -187,7 +180,7 @@ public class MainActivity extends AppCompatActivity implements MenuItemFragment.
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        // create a dataset with only visible items
+        // create a data set with only visible items
         ArrayList<Item> visibleItems = new ArrayList<>();
 
         for (Item e : mMenu) {
@@ -204,7 +197,7 @@ public class MainActivity extends AppCompatActivity implements MenuItemFragment.
     private void changeCategoryVisibility(CompoundButton buttonView, boolean isChecked) {
         // iterate items and set visibility on category match
         for (Item e : mMenu) {
-            if (e.category.equals(buttonView.getText())) {
+            if (buttonView.getText().equals(e.category)) {
                 e.isVisible = isChecked;
                 e.isSelected = false;
             }
