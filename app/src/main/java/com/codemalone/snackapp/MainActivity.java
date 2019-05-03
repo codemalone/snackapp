@@ -15,6 +15,8 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 
 import com.codemalone.snackapp.dummy.Item;
 import com.codemalone.snackapp.dummy.Order;
@@ -45,14 +47,44 @@ public class MainActivity extends AppCompatActivity implements MenuItemFragment.
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // build order list from selected items
+                ArrayList<Item> newOrder = new ArrayList<>();
 
-                // we can make the network call here and pass showOrder as the callback.
-                showOrder();
+                for (Item e : mMenu) {
+                    if (e.isSelected) {
+                        newOrder.add(e);
+                    }
+                }
 
+                // only send a non-empty order
+                if (newOrder.isEmpty()) {
+                    // this could display a friendly error dialogue.
+                } else {
+                    // we can make the NETWORK CALL here and pass showOrder as the callback.
+                    showOrder(newOrder);
+                }
             }
         });
 
         initializeRecyclerView();
+
+        // set category checkbox listeners
+        CheckBox veggie = (CheckBox) findViewById(R.id.checkbox_category_veggie);
+        veggie.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                changeCategoryVisibility(buttonView, isChecked);
+            }
+        });
+
+        CheckBox nonVeggie = (CheckBox) findViewById(R.id.checkbox_category_non_veggie);
+        nonVeggie.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                changeCategoryVisibility(buttonView, isChecked);
+            }
+        });
+
     }
 
     private ArrayList<Item> createNewMenu() {
@@ -111,14 +143,12 @@ public class MainActivity extends AppCompatActivity implements MenuItemFragment.
         System.out.println("RestoreState");
     }
 
-    private void showOrder() {
+    private void showOrder(List<Item> theOrder) {
         StringBuilder orderText = new StringBuilder();
 
-        for (Item e : mMenu) {
-            if (e.isSelected) {
-                orderText.append(e.toString());
-                orderText.append("\n");
-            }
+        for (Item e : theOrder) {
+            orderText.append(e.toString());
+            orderText.append("\n");
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -137,12 +167,14 @@ public class MainActivity extends AppCompatActivity implements MenuItemFragment.
         // update menu items
         for (Item e : mMenu) {
             e.isSelected = false;
-            e.isVisible = true;
         }
 
         // notify recycler view
         mAdapter.notifyDataSetChanged();
     }
+
+
+
 
     private void initializeRecyclerView() {
         recyclerView = (RecyclerView) findViewById(R.id.frame_content_menu);
@@ -155,8 +187,30 @@ public class MainActivity extends AppCompatActivity implements MenuItemFragment.
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
+        // create a dataset with only visible items
+        ArrayList<Item> visibleItems = new ArrayList<>();
+
+        for (Item e : mMenu) {
+            if (e.isVisible) {
+                visibleItems.add(e);
+            }
+        }
+
         // specify an adapter (see also next example)
-        mAdapter = new MyMenuItemRecyclerViewAdapter(mMenu, this);
+        mAdapter = new MyMenuItemRecyclerViewAdapter(visibleItems, this);
         recyclerView.setAdapter(mAdapter);
+    }
+
+    private void changeCategoryVisibility(CompoundButton buttonView, boolean isChecked) {
+        // iterate items and set visibility on category match
+        for (Item e : mMenu) {
+            if (e.category.equals(buttonView.getText())) {
+                e.isVisible = isChecked;
+                e.isSelected = false;
+            }
+        }
+
+        // update recycler view
+        initializeRecyclerView();
     }
 }
