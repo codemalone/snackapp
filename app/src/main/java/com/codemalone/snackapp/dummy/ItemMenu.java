@@ -1,5 +1,8 @@
 package com.codemalone.snackapp.dummy;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,14 +13,14 @@ import java.util.List;
  * <p>
  * TODO: Replace all uses of this class before publishing your app.
  */
-public class Menu implements Serializable {
+public class ItemMenu implements Serializable {
 
     /**
      * An array of sample (dummy) items.
      */
     public final List<Item> items;
 
-    public Menu() {
+    public ItemMenu() {
         items = new ArrayList<>();
         addItem(new Item("French fries", "Veggie"));
         addItem(new Item("Veggieburger", "Veggie"));

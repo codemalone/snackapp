@@ -11,7 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.codemalone.snackapp.dummy.Menu;
+import com.codemalone.snackapp.dummy.ItemMenu;
 import com.codemalone.snackapp.dummy.Item;
 
 /**
@@ -29,7 +29,7 @@ public class MenuItemFragment extends Fragment {
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
-    public Menu mMenu;
+    public ItemMenu mItemMenu;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -44,7 +44,7 @@ public class MenuItemFragment extends Fragment {
         MenuItemFragment fragment = new MenuItemFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
-        args.putSerializable(ARG_MENU, new Menu());
+        args.putSerializable(ARG_MENU, new ItemMenu());
         fragment.setArguments(args);
         return fragment;
     }
@@ -56,23 +56,23 @@ public class MenuItemFragment extends Fragment {
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
 
-            Menu savedMenu = (Menu) getArguments().get(ARG_MENU);
+            ItemMenu savedItemMenu = (ItemMenu) getArguments().get(ARG_MENU);
 
-            if (savedMenu != null) {
-                mMenu = savedMenu;
+            if (savedItemMenu != null) {
+                mItemMenu = savedItemMenu;
             } else {
-                mMenu = new Menu();
+                mItemMenu = new ItemMenu();
             }
 
         } else {
-            mMenu = new Menu();
+            mItemMenu = new ItemMenu();
         }
     }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
-        outState.putSerializable(ARG_MENU, mMenu);
-        System.out.println("Saved Menu");
+        outState.putSerializable(ARG_MENU, mItemMenu);
+        System.out.println("Saved ItemMenu");
         super.onSaveInstanceState(outState);
     }
 
@@ -90,7 +90,7 @@ public class MenuItemFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyMenuItemRecyclerViewAdapter(mMenu.items, mListener));
+            recyclerView.setAdapter(new MyMenuItemRecyclerViewAdapter(mItemMenu.items, mListener));
         }
         return view;
     }

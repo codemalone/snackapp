@@ -1,28 +1,36 @@
 package com.codemalone.snackapp;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.AttributeSet;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 
 import com.codemalone.snackapp.dummy.Item;
+import com.codemalone.snackapp.dummy.ItemMenu;
 import com.codemalone.snackapp.dummy.Order;
-
-import java.util.Collection;
-import java.util.Iterator;
 
 public class MainActivity extends AppCompatActivity implements MenuItemFragment.OnListFragmentInteractionListener {
 
     private static final String ARG_ORDER = "order";
-    private MenuItemFragment mMenuItemFragment;
+    private static final String ARG_MENU = "menu";
     private Order mOrder;
+    private ItemMenu mMenu;
+
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager layoutManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,12 +40,8 @@ public class MainActivity extends AppCompatActivity implements MenuItemFragment.
         setSupportActionBar(toolbar);
 
         if (savedInstanceState == null) {
-            mMenuItemFragment = new MenuItemFragment();
             mOrder = new Order();
-
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.frame_content_menu, mMenuItemFragment)
-                    .commit();
+            mMenu = new ItemMenu();
         } else {
             Order savedOrder = (Order) savedInstanceState.getSerializable(ARG_ORDER);
 
@@ -47,8 +51,13 @@ public class MainActivity extends AppCompatActivity implements MenuItemFragment.
                 mOrder = new Order();
             }
 
-            // something missing with mMenuItemFragment
-            // review lifecycle
+            ItemMenu savedMenu = (ItemMenu) savedInstanceState.getSerializable(ARG_MENU);
+
+            if (savedMenu != null) {
+                mMenu = savedMenu;
+            } else {
+                mMenu = new ItemMenu();
+            }
         }
 
         Button submit = findViewById(R.id.frame_content_submit);
@@ -61,12 +70,21 @@ public class MainActivity extends AppCompatActivity implements MenuItemFragment.
 
             }
         });
-    }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        outState.putSerializable(ARG_ORDER, mOrder);
-        super.onSaveInstanceState(outState, outPersistentState);
+        recyclerView = (RecyclerView) findViewById(R.id.frame_content_menu);
+
+        // use this setting to improve performance if you know that changes
+        // in content do not change the layout size of the RecyclerView
+        recyclerView.setHasFixedSize(true);
+
+        // use a linear layout manager
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+
+        // specify an adapter (see also next example)
+        mAdapter = new MyMenuItemRecyclerViewAdapter(mMenu.items, this);
+        recyclerView.setAdapter(mAdapter);
+
     }
 
     @Override
@@ -127,13 +145,12 @@ public class MainActivity extends AppCompatActivity implements MenuItemFragment.
         mOrder = new Order();
 
         // update menu items
-        for (Item e : mMenuItemFragment.mMenu.items) {
+        for (Item e : mMenu.items) {
             e.isChecked = false;
         }
 
         // notify recycler view
-        RecyclerView v = (RecyclerView) mMenuItemFragment.getView();
-        v.getAdapter().notifyDataSetChanged();
+        mAdapter.notifyDataSetChanged();
     }
 
     private void resetMenuView() {

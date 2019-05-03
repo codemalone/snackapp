@@ -40,16 +40,14 @@
     </android.support.constraint.ConstraintLayout>
 
 
-    <FrameLayout
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/frame_content_menu"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toTopOf="@+id/frame_content_submit"
-        app:layout_constraintTop_toBottomOf="@+id/frame_content_category">
-
-    </FrameLayout>
+        app:layout_constraintTop_toBottomOf="@+id/frame_content_category" />
 
     <Button
         android:id="@+id/frame_content_submit"
