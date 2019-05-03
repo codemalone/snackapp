@@ -14,14 +14,23 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 
-import com.codemalone.snackapp.dummy.Item;
+import com.codemalone.snackapp.model.Item;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Main activity for the Snack App.
+ *
+ * Author: Jared Malone
+ * Date: 5/3/2019
+ */
 public class MainActivity extends AppCompatActivity implements MenuItemFragment.OnListFragmentInteractionListener {
 
+    /* The instance state of all items are stored under this key. */
     private static final String ARG_MENU = "menu";
+
+    /* Reference to all items. */
     private ArrayList<Item> mMenu;
 
     private RecyclerView recyclerView;
@@ -35,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements MenuItemFragment.
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // create a new menu. changes to menu do not persist if the app is reloaded.
         mMenu = createNewMenu();
         initializeRecyclerView();
 
@@ -56,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements MenuItemFragment.
                 if (newOrder.isEmpty()) {
                     // this could display a friendly error dialogue.
                 } else {
-                    // we can make the NETWORK CALL here and pass showOrder as the callback.
+                    // TODO: NETWORK CALL here and pass showOrder as the callback.
                     showOrder(newOrder);
                 }
             }
@@ -80,6 +90,10 @@ public class MainActivity extends AppCompatActivity implements MenuItemFragment.
         });
     }
 
+    /**
+     * This builds a new menu list. We could update this data from a network resource.
+     * @return newMenu containing an ArrayList of all items.
+     */
     private ArrayList<Item> createNewMenu() {
         final String veggie = getString(R.string.category_content_veggie);
         final String nonVeggie = getString(R.string.category_content_non_veggie);
@@ -98,6 +112,24 @@ public class MainActivity extends AppCompatActivity implements MenuItemFragment.
     }
 
     @Override
+    public void onListFragmentInteraction(Item item, boolean isChecked) {
+        item.isSelected = isChecked;
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(ARG_MENU, mMenu);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        mMenu = savedInstanceState.getParcelableArrayList(ARG_MENU);
+        initializeRecyclerView();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -113,41 +145,27 @@ public class MainActivity extends AppCompatActivity implements MenuItemFragment.
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+
+            // TODO: call method to display dialog for adding new menu item.
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onListFragmentInteraction(Item item, boolean isChecked) {
-        item.isSelected = isChecked;
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putParcelableArrayList(ARG_MENU, mMenu);
-        System.out.println("SaveState");
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        mMenu = savedInstanceState.getParcelableArrayList(ARG_MENU);
-        initializeRecyclerView();
-        System.out.println("RestoreState");
-    }
-
-    private void showOrder(List<Item> theOrder) {
-        StringBuilder orderText = new StringBuilder();
+    /**
+     * Displays a dialog with the contents of the sent order.
+     * @param theOrder
+     */
+    private void showOrder(final List<Item> theOrder) {
+        final StringBuilder orderText = new StringBuilder();
 
         for (Item e : theOrder) {
             orderText.append(e.toString());
             orderText.append("\n");
         }
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Order Sent").setMessage(orderText.toString());
         builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
@@ -155,10 +173,12 @@ public class MainActivity extends AppCompatActivity implements MenuItemFragment.
                 resetOrder();
             }
         });
-        AlertDialog dialog = builder.create();
-        dialog.show();
+        builder.create().show();
     }
 
+    /**
+     * Resets all menu items to a non-selected state.
+     */
     private void resetOrder() {
         // update menu items
         for (Item e : mMenu) {
@@ -169,18 +189,19 @@ public class MainActivity extends AppCompatActivity implements MenuItemFragment.
         mAdapter.notifyDataSetChanged();
     }
 
+    /**
+     * Called to create a new recycler view during app initialization or
+     * when the set of visible categories has changed.
+     */
     private void initializeRecyclerView() {
         recyclerView = findViewById(R.id.frame_content_menu);
-
-        // use this setting to improve performance if you know that changes
-        // in content do not change the layout size of the RecyclerView
         recyclerView.setHasFixedSize(true);
 
         // use a linear layout manager
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        // create a data set with only visible items
+        // create a new data set consisting of only visible items
         ArrayList<Item> visibleItems = new ArrayList<>();
 
         for (Item e : mMenu) {
@@ -189,11 +210,17 @@ public class MainActivity extends AppCompatActivity implements MenuItemFragment.
             }
         }
 
-        // specify an adapter (see also next example)
         mAdapter = new MyMenuItemRecyclerViewAdapter(visibleItems, this);
         recyclerView.setAdapter(mAdapter);
     }
 
+    /**
+     * Event listener to update the state of menu items when its category is selected
+     * or deselected. If the isVisible state of an item changes then it is also deselected
+     * from the menu list.
+     * @param buttonView the category checkBox that has changed.
+     * @param isChecked true if the category has been selected by the user.
+     */
     private void changeCategoryVisibility(CompoundButton buttonView, boolean isChecked) {
         // iterate items and set visibility on category match
         for (Item e : mMenu) {

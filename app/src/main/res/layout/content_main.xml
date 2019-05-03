@@ -16,7 +16,7 @@
         android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/frameLayout">
+        app:layout_constraintTop_toTopOf="parent">
 
         <CheckBox
             android:id="@+id/checkbox_category_veggie"
@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:checked="true"
-            android:text="@string/menu_category_veggie"
+            android:text="@string/category_content_veggie"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

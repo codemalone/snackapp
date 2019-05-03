@@ -1,19 +1,25 @@
-package com.codemalone.snackapp.dummy;
+package com.codemalone.snackapp.model;
 
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
+/**
+ * Represents a menu item to display in the RecyclerView.
+ */
 public class Item implements Parcelable {
-    public final String name;
-    public final String category;
-    public boolean isSelected;
-    public boolean isVisible;
-
+    /* key names for Parcelable storage. */
     private static String ARGS_NAME = "name";
     private static String ARGS_CATEGORY = "category";
     private static String ARGS_SELECTED = "selected";
     private static String ARGS_VISIBLE = "visible";
+
+    /* Instance variables */
+    public final String name;
+    public final String category;
+    public boolean isSelected;
+    public boolean isVisible;
 
     public Item(String name, String category) {
         this.name = name;
@@ -22,6 +28,7 @@ public class Item implements Parcelable {
         this.isVisible = true;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return name;
@@ -29,11 +36,11 @@ public class Item implements Parcelable {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null || !(obj instanceof Item)) {
-            return false;
-        } else {
+        if (obj instanceof Item) {
             Item other = (Item) obj;
-            return (this.name == other.name);
+            return (this.name.equals(other.name));
+        } else {
+            return false;
         }
     }
 
@@ -57,8 +64,11 @@ public class Item implements Parcelable {
         dest.writeBundle(fields);
     }
 
-    public static final Parcelable.Creator<Item> CREATOR
-            = new Parcelable.Creator<Item>() {
+    /**
+     * Parcelable is used to store and retrieve object instance state
+     * before and after an Android system event.
+     */
+    public static final Parcelable.Creator<Item> CREATOR  = new Parcelable.Creator<Item>() {
         public Item createFromParcel(Parcel in) {
             return new Item(in);
         }
@@ -75,5 +85,4 @@ public class Item implements Parcelable {
         isSelected = fields.getBoolean(ARGS_SELECTED);
         isVisible = fields.getBoolean(ARGS_VISIBLE);
     }
-
 }
