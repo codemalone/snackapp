@@ -1,8 +1,11 @@
 package com.codemalone.snackapp;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -147,7 +150,7 @@ public class MainActivity extends AppCompatActivity implements MenuItemFragment.
         if (id == R.id.action_settings) {
 
             // TODO: call method to display dialog for adding new menu item.
-            return true;
+            showAddItemDialog();
         }
 
         return super.onOptionsItemSelected(item);
@@ -232,5 +235,11 @@ public class MainActivity extends AppCompatActivity implements MenuItemFragment.
 
         // update recycler view
         initializeRecyclerView();
+    }
+
+    private void showAddItemDialog() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        AddItemDialogFragment newFragment = new AddItemDialogFragment();
+        newFragment.show(getSupportFragmentManager(), "addItem");
     }
 }
