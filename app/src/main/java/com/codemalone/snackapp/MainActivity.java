@@ -19,13 +19,14 @@ import android.widget.Button;
 import com.codemalone.snackapp.dummy.Item;
 import com.codemalone.snackapp.dummy.Order;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements MenuItemFragment.OnListFragmentInteractionListener {
 
     private static final String ARG_MENU = "menu";
-    private List<Item> mMenu;
+    private ArrayList<Item> mMenu;
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
@@ -51,24 +52,11 @@ public class MainActivity extends AppCompatActivity implements MenuItemFragment.
             }
         });
 
-        recyclerView = (RecyclerView) findViewById(R.id.frame_content_menu);
-
-        // use this setting to improve performance if you know that changes
-        // in content do not change the layout size of the RecyclerView
-        recyclerView.setHasFixedSize(true);
-
-        // use a linear layout manager
-        layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-
-        // specify an adapter (see also next example)
-        mAdapter = new MyMenuItemRecyclerViewAdapter(mMenu, this);
-        recyclerView.setAdapter(mAdapter);
-
+        initializeRecyclerView();
     }
 
-    private List<Item> createNewMenu() {
-        List<Item> newMenu = new ArrayList<>();
+    private ArrayList<Item> createNewMenu() {
+        ArrayList<Item> newMenu = new ArrayList<>();
         newMenu.add(new Item("French fries", "Veggie"));
         newMenu.add(new Item("Veggieburger", "Veggie"));
         newMenu.add(new Item("Carrots", "Veggie"));
@@ -108,6 +96,21 @@ public class MainActivity extends AppCompatActivity implements MenuItemFragment.
         item.isSelected = isChecked;
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(ARG_MENU, mMenu);
+        System.out.println("SaveState");
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        mMenu = savedInstanceState.getParcelableArrayList(ARG_MENU);
+        initializeRecyclerView();
+        System.out.println("RestoreState");
+    }
+
     private void showOrder() {
         StringBuilder orderText = new StringBuilder();
 
@@ -139,5 +142,21 @@ public class MainActivity extends AppCompatActivity implements MenuItemFragment.
 
         // notify recycler view
         mAdapter.notifyDataSetChanged();
+    }
+
+    private void initializeRecyclerView() {
+        recyclerView = (RecyclerView) findViewById(R.id.frame_content_menu);
+
+        // use this setting to improve performance if you know that changes
+        // in content do not change the layout size of the RecyclerView
+        recyclerView.setHasFixedSize(true);
+
+        // use a linear layout manager
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+
+        // specify an adapter (see also next example)
+        mAdapter = new MyMenuItemRecyclerViewAdapter(mMenu, this);
+        recyclerView.setAdapter(mAdapter);
     }
 }
