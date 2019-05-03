@@ -1,5 +1,6 @@
 package com.codemalone.snackapp.dummy;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,14 +10,15 @@ import java.util.List;
  * <p>
  * TODO: Replace all uses of this class before publishing your app.
  */
-public class MenuContent {
+public class Menu implements Serializable {
 
     /**
      * An array of sample (dummy) items.
      */
-    public static final List<Item> ITEMS = new ArrayList<Item>();
+    public final List<Item> items;
 
-    static {
+    public Menu() {
+        items = new ArrayList<>();
         addItem(new Item("French fries", "Veggie"));
         addItem(new Item("Veggieburger", "Veggie"));
         addItem(new Item("Carrots", "Veggie"));
@@ -28,8 +30,8 @@ public class MenuContent {
         addItem(new Item("Hot dog", "Non-Veggie"));
     }
 
-    private static void addItem(Item item) {
-        ITEMS.add(item);
-        //ITEM_MAP.put(item.id, item);
+    public void addItem(final Item theItem) {
+        items.add(theItem);
     }
+
 }
