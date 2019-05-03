@@ -10,8 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.codemalone.snackapp.dummy.DummyContent;
-import com.codemalone.snackapp.dummy.DummyContent.DummyItem;
+import com.codemalone.snackapp.dummy.MenuContent;
+import com.codemalone.snackapp.dummy.MenuContent.MenuItem;
 
 import java.util.List;
 
@@ -69,7 +69,7 @@ public class MenuItemFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyMenuItemRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+            recyclerView.setAdapter(new MyMenuItemRecyclerViewAdapter(MenuContent.ITEMS, mListener));
         }
         return view;
     }
@@ -104,6 +104,6 @@ public class MenuItemFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+        void onListFragmentInteraction(MenuItem item);
     }
 }

@@ -7,21 +7,21 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.codemalone.snackapp.MenuItemFragment.OnListFragmentInteractionListener;
-import com.codemalone.snackapp.dummy.DummyContent.DummyItem;
+import com.codemalone.snackapp.dummy.MenuContent.MenuItem;
 
 import java.util.List;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
+ * {@link RecyclerView.Adapter} that can display a {@link MenuItem} and makes a call to the
  * specified {@link OnListFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
 public class MyMenuItemRecyclerViewAdapter extends RecyclerView.Adapter<MyMenuItemRecyclerViewAdapter.ViewHolder> {
 
-    private final List<DummyItem> mValues;
+    private final List<MenuItem> mValues;
     private final OnListFragmentInteractionListener mListener;
 
-    public MyMenuItemRecyclerViewAdapter(List<DummyItem> items, OnListFragmentInteractionListener listener) {
+    public MyMenuItemRecyclerViewAdapter(List<MenuItem> items, OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -36,8 +36,8 @@ public class MyMenuItemRecyclerViewAdapter extends RecyclerView.Adapter<MyMenuIt
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        //holder.mIdView.setText(mValues.get(position).id);
+        holder.mContentView.setText(mValues.get(position).name);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,15 +58,15 @@ public class MyMenuItemRecyclerViewAdapter extends RecyclerView.Adapter<MyMenuIt
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        public final TextView mIdView;
+        //public final TextView mIdView;
         public final TextView mContentView;
-        public DummyItem mItem;
+        public MenuItem mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.item_number);
-            mContentView = (TextView) view.findViewById(R.id.content);
+            //mIdView = (TextView) view.findViewById(R.id.item_number);
+            mContentView = (TextView) view.findViewById(R.id.item_name);
         }
 
         @Override

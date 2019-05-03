@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.codemalone.snackapp.dummy.DummyContent;
+import com.codemalone.snackapp.dummy.MenuContent;
 
 public class MainActivity extends AppCompatActivity implements MenuItemFragment.OnListFragmentInteractionListener {
 
@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements MenuItemFragment.
     }
 
     @Override
-    public void onListFragmentInteraction(DummyContent.DummyItem item) {
+    public void onListFragmentInteraction(MenuContent.MenuItem item) {
 
     }
 }
