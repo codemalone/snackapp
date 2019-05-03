@@ -3,5 +3,7 @@
     <string name="action_add_item">Add Menu Item</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="veggie_frame_content">Veggie</string>
+    <string name="non_veggie_frame_content">Non-Veggie</string>
+    <string name="submit_frame_content">Submit</string>
 </resources>
