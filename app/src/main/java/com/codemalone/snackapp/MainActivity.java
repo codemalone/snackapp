@@ -17,20 +17,19 @@ import android.view.MenuItem;
 import android.widget.Button;
 
 import com.codemalone.snackapp.dummy.Item;
-import com.codemalone.snackapp.dummy.ItemMenu;
 import com.codemalone.snackapp.dummy.Order;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements MenuItemFragment.OnListFragmentInteractionListener {
 
-    private static final String ARG_ORDER = "order";
     private static final String ARG_MENU = "menu";
-    private Order mOrder;
-    private ItemMenu mMenu;
+    private List<Item> mMenu;
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,26 +38,7 @@ public class MainActivity extends AppCompatActivity implements MenuItemFragment.
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        if (savedInstanceState == null) {
-            mOrder = new Order();
-            mMenu = new ItemMenu();
-        } else {
-            Order savedOrder = (Order) savedInstanceState.getSerializable(ARG_ORDER);
-
-            if (savedOrder != null) {
-                mOrder = savedOrder;
-            } else {
-                mOrder = new Order();
-            }
-
-            ItemMenu savedMenu = (ItemMenu) savedInstanceState.getSerializable(ARG_MENU);
-
-            if (savedMenu != null) {
-                mMenu = savedMenu;
-            } else {
-                mMenu = new ItemMenu();
-            }
-        }
+        mMenu = createNewMenu();
 
         Button submit = findViewById(R.id.frame_content_submit);
         submit.setOnClickListener(new View.OnClickListener() {
@@ -82,9 +62,23 @@ public class MainActivity extends AppCompatActivity implements MenuItemFragment.
         recyclerView.setLayoutManager(layoutManager);
 
         // specify an adapter (see also next example)
-        mAdapter = new MyMenuItemRecyclerViewAdapter(mMenu.items, this);
+        mAdapter = new MyMenuItemRecyclerViewAdapter(mMenu, this);
         recyclerView.setAdapter(mAdapter);
 
+    }
+
+    private List<Item> createNewMenu() {
+        List<Item> newMenu = new ArrayList<>();
+        newMenu.add(new Item("French fries", "Veggie"));
+        newMenu.add(new Item("Veggieburger", "Veggie"));
+        newMenu.add(new Item("Carrots", "Veggie"));
+        newMenu.add(new Item("Apple", "Veggie"));
+        newMenu.add(new Item("Banana", "Veggie"));
+        newMenu.add(new Item("Milkshake", "Veggie"));
+        newMenu.add(new Item("Cheeseburger", "Non-Veggie"));
+        newMenu.add(new Item("Hamburger", "Non-Veggie"));
+        newMenu.add(new Item("Hot dog", "Non-Veggie"));
+        return newMenu;
     }
 
     @Override
@@ -111,21 +105,17 @@ public class MainActivity extends AppCompatActivity implements MenuItemFragment.
 
     @Override
     public void onListFragmentInteraction(Item item, boolean isChecked) {
-        if (isChecked) {
-            mOrder.items.add(item);
-            item.isChecked = true;
-        } else {
-            mOrder.items.remove(item);
-            item.isChecked = false;
-        }
+        item.isSelected = isChecked;
     }
 
     private void showOrder() {
         StringBuilder orderText = new StringBuilder();
 
-        for (Item e : mOrder.items) {
-            orderText.append(e.toString());
-            orderText.append("\n");
+        for (Item e : mMenu) {
+            if (e.isSelected) {
+                orderText.append(e.toString());
+                orderText.append("\n");
+            }
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -141,19 +131,13 @@ public class MainActivity extends AppCompatActivity implements MenuItemFragment.
     }
 
     private void resetOrder() {
-        // create new order
-        mOrder = new Order();
-
         // update menu items
-        for (Item e : mMenu.items) {
-            e.isChecked = false;
+        for (Item e : mMenu) {
+            e.isSelected = false;
+            e.isVisible = true;
         }
 
         // notify recycler view
         mAdapter.notifyDataSetChanged();
-    }
-
-    private void resetMenuView() {
-
     }
 }

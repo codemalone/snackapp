@@ -39,7 +39,7 @@ public class MyMenuItemRecyclerViewAdapter extends RecyclerView.Adapter<MyMenuIt
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
         holder.mContentView.setText(holder.mItem.name);
-        holder.mCheckBox.setChecked(holder.mItem.isChecked);
+        holder.mCheckBox.setChecked(holder.mItem.isSelected);
 
         holder.mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

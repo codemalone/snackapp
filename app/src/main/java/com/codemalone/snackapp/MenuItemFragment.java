@@ -29,7 +29,6 @@ public class MenuItemFragment extends Fragment {
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
-    public ItemMenu mItemMenu;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -55,25 +54,7 @@ public class MenuItemFragment extends Fragment {
 
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-
-            ItemMenu savedItemMenu = (ItemMenu) getArguments().get(ARG_MENU);
-
-            if (savedItemMenu != null) {
-                mItemMenu = savedItemMenu;
-            } else {
-                mItemMenu = new ItemMenu();
-            }
-
-        } else {
-            mItemMenu = new ItemMenu();
         }
-    }
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        outState.putSerializable(ARG_MENU, mItemMenu);
-        System.out.println("Saved ItemMenu");
-        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -90,7 +71,7 @@ public class MenuItemFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyMenuItemRecyclerViewAdapter(mItemMenu.items, mListener));
+            //recyclerView.setAdapter(new MyMenuItemRecyclerViewAdapter(mItemMenu.items, mListener));
         }
         return view;
     }
