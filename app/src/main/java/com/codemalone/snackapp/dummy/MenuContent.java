@@ -1,9 +1,7 @@
 package com.codemalone.snackapp.dummy;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Helper class for providing sample content for user interfaces created by
@@ -16,40 +14,22 @@ public class MenuContent {
     /**
      * An array of sample (dummy) items.
      */
-    public static final List<MenuItem> ITEMS = new ArrayList<MenuItem>();
+    public static final List<Item> ITEMS = new ArrayList<Item>();
 
     static {
-        addItem(new MenuItem("French fries", "Veggie"));
-        addItem(new MenuItem("Veggieburger", "Veggie"));
-        addItem(new MenuItem("Carrots", "Veggie"));
-        addItem(new MenuItem("Apple", "Veggie"));
-        addItem(new MenuItem("Banana", "Veggie"));
-        addItem(new MenuItem("Milkshake", "Veggie"));
-        addItem(new MenuItem("Cheeseburger", "Non-Veggie"));
-        addItem(new MenuItem("Hamburger", "Non-Veggie"));
-        addItem(new MenuItem("Hot dog", "Non-Veggie"));
+        addItem(new Item("French fries", "Veggie"));
+        addItem(new Item("Veggieburger", "Veggie"));
+        addItem(new Item("Carrots", "Veggie"));
+        addItem(new Item("Apple", "Veggie"));
+        addItem(new Item("Banana", "Veggie"));
+        addItem(new Item("Milkshake", "Veggie"));
+        addItem(new Item("Cheeseburger", "Non-Veggie"));
+        addItem(new Item("Hamburger", "Non-Veggie"));
+        addItem(new Item("Hot dog", "Non-Veggie"));
     }
 
-    private static void addItem(MenuItem item) {
+    private static void addItem(Item item) {
         ITEMS.add(item);
         //ITEM_MAP.put(item.id, item);
-    }
-
-    /**
-     * A dummy item representing a piece of content.
-     */
-    public static class MenuItem {
-        public final String name;
-        public final String category;
-
-        public MenuItem(String name, String category) {
-            this.name = name;
-            this.category = category;
-        }
-
-        @Override
-        public String toString() {
-            return name;
-        }
     }
 }

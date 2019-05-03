@@ -11,9 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.codemalone.snackapp.dummy.MenuContent;
-import com.codemalone.snackapp.dummy.MenuContent.MenuItem;
-
-import java.util.List;
+import com.codemalone.snackapp.dummy.Item;
 
 /**
  * A fragment representing a list of Items.
@@ -25,6 +23,7 @@ public class MenuItemFragment extends Fragment {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
+
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
@@ -104,6 +103,6 @@ public class MenuItemFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(MenuItem item);
+        void onListFragmentInteraction(Item item, boolean selected);
     }
 }

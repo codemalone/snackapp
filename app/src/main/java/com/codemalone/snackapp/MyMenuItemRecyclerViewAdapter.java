@@ -4,24 +4,26 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.codemalone.snackapp.MenuItemFragment.OnListFragmentInteractionListener;
-import com.codemalone.snackapp.dummy.MenuContent.MenuItem;
+import com.codemalone.snackapp.dummy.Item;
 
 import java.util.List;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link MenuItem} and makes a call to the
+ * {@link RecyclerView.Adapter} that can display a {@link Item} and makes a call to the
  * specified {@link OnListFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
 public class MyMenuItemRecyclerViewAdapter extends RecyclerView.Adapter<MyMenuItemRecyclerViewAdapter.ViewHolder> {
 
-    private final List<MenuItem> mValues;
+    private final List<Item> mValues;
     private final OnListFragmentInteractionListener mListener;
 
-    public MyMenuItemRecyclerViewAdapter(List<MenuItem> items, OnListFragmentInteractionListener listener) {
+    public MyMenuItemRecyclerViewAdapter(List<Item> items, OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -36,17 +38,12 @@ public class MyMenuItemRecyclerViewAdapter extends RecyclerView.Adapter<MyMenuIt
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        //holder.mIdView.setText(mValues.get(position).id);
         holder.mContentView.setText(mValues.get(position).name);
 
-        holder.mView.setOnClickListener(new View.OnClickListener() {
+        holder.mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View v) {
-                if (null != mListener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
-                    mListener.onListFragmentInteraction(holder.mItem);
-                }
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                mListener.onListFragmentInteraction(holder.mItem, isChecked);
             }
         });
     }
@@ -58,15 +55,15 @@ public class MyMenuItemRecyclerViewAdapter extends RecyclerView.Adapter<MyMenuIt
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        //public final TextView mIdView;
         public final TextView mContentView;
-        public MenuItem mItem;
+        public final CheckBox mCheckBox;
+        public Item mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            //mIdView = (TextView) view.findViewById(R.id.item_number);
             mContentView = (TextView) view.findViewById(R.id.item_name);
+            mCheckBox = (CheckBox) view.findViewById(R.id.item_checkbox);
         }
 
         @Override
