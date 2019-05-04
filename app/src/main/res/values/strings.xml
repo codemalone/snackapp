@@ -8,4 +8,5 @@
     <string name="button_add_item_cancel">Cancel</string>
     <string name="hint_add_item_name">New item name</string>
     <string name="dialog_error_try_again">Try Again</string>
+    <string name="dialog_error_title">Add Item Failed</string>
 </resources>

@@ -283,30 +283,35 @@ public class MainActivity extends AppCompatActivity implements MenuItemFragment.
      * @param theCategory a valid category.
      */
     private void addItem(final String theName, final String theCategory) {
-        Item newItem = new Item(theName, theCategory);
-
-        if (mMenu.contains(newItem)) {
-            showDuplicateError(newItem.name);
+        if (theName.isEmpty()) {
+            showNameError("The item name cannot be empty.");
         } else {
-            // check current category state
-            CheckBox veggieCheckBox = findViewById(R.id.checkbox_category_veggie);
-            CheckBox nonVeggieCheckBox = findViewById(R.id.checkbox_category_non_veggie);
+            Item newItem = new Item(theName, theCategory);
 
-            if (theCategory.equals(veggieCheckBox.getText().toString())) {
-                newItem.isVisible = veggieCheckBox.isChecked();
+            if (mMenu.contains(newItem)) {
+                final String message = "An item named " + newItem.name + " already exists.";
+                showNameError(message);
             } else {
-                newItem.isVisible = nonVeggieCheckBox.isChecked();
-            }
+                // determine if category is currently visible
+                CheckBox veggieCheckBox = findViewById(R.id.checkbox_category_veggie);
+                CheckBox nonVeggieCheckBox = findViewById(R.id.checkbox_category_non_veggie);
 
-            mMenu.add(newItem);
-            initializeRecyclerView();
+                if (theCategory.equals(veggieCheckBox.getText().toString())) {
+                    newItem.isVisible = veggieCheckBox.isChecked();
+                } else {
+                    newItem.isVisible = nonVeggieCheckBox.isChecked();
+                }
+
+                mMenu.add(newItem);
+                initializeRecyclerView();
+            }
         }
     }
 
     /**
-     * Displays an error dialog indicating that item names must be unique.
+     * Displays an error dialog indicating that add item operation failed.
      */
-    private void showDuplicateError(String theItemName) {
+    private void showNameError(String theMessage) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setPositiveButton(R.string.dialog_error_try_again, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
@@ -316,8 +321,8 @@ public class MainActivity extends AppCompatActivity implements MenuItemFragment.
             }
         });
 
-        builder.setTitle("Add Item Failed");
-        builder.setMessage("An item named " + theItemName + " already exists.");
+        builder.setTitle(getString(R.string.dialog_error_title));
+        builder.setMessage(theMessage);
         builder.create().show();
     }
 }
