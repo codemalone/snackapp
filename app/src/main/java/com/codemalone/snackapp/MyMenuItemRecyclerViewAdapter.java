@@ -1,5 +1,6 @@
 package com.codemalone.snackapp;
 
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -41,6 +42,13 @@ public class MyMenuItemRecyclerViewAdapter extends RecyclerView.Adapter<MyMenuIt
         holder.mItem = mValues.get(position);
         holder.mContentView.setText(holder.mItem.name);
         holder.mCheckBox.setChecked(holder.mItem.isSelected);
+
+        // set color
+        if (holder.mItem.category.equals("Veggie")) {
+            holder.mContentView.setTextColor(Color.rgb(0, 100, 0));
+        } else {
+            holder.mContentView.setTextColor(Color.RED);
+        }
 
         holder.mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

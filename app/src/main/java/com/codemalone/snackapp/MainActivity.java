@@ -17,6 +17,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import com.codemalone.snackapp.model.Item;
 
@@ -159,7 +162,7 @@ public class MainActivity extends AppCompatActivity implements MenuItemFragment.
 
     /**
      * Displays a dialog with the contents of the sent order.
-     * @param theOrder
+     * @param theOrder a list of items ordered.
      */
     private void showOrder(final List<Item> theOrder) {
         final StringBuilder orderText = new StringBuilder();
@@ -238,25 +241,52 @@ public class MainActivity extends AppCompatActivity implements MenuItemFragment.
         initializeRecyclerView();
     }
 
+    /**
+     * Displays a dialog to allow the addition of a new menu item.
+     */
     private void showAddItemDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        final View v = inflater.inflate(R.layout.fragement_add_item, null);
+        builder.setView(v);
+
+        RadioButton button1 = v.findViewById(R.id.dialog_add_item_button1);
+        button1.toggle();
 
         builder.setPositiveButton(R.string.button_add_item_save, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User clicked OK button
+                RadioGroup group = v.findViewById(R.id.dialog_add_item_group);
+                final int selected = group.getCheckedRadioButtonId();
+
+                Button button = v.findViewById(selected);
+                final String category = button.getText().toString();
+
+                EditText nameField = v.findViewById(R.id.dialog_add_item_name);
+                final String name = nameField.getText().toString();
+
+                addItem(name, category);
             }
         });
 
         builder.setNegativeButton(R.string.button_add_item_cancel, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                // User cancelled the dialog
+                dialog.cancel();
             }
         });
         builder.setTitle(R.string.action_add_item);
 
         // inflate xml layout
-        LayoutInflater inflater = getLayoutInflater();
-        builder.setView(inflater.inflate(R.layout.fragement_add_item, null));
         builder.create().show();
+    }
+
+    /**
+     * Inserts a new item to the menu.
+     * @param theName new item name.
+     * @param theCategory a valid category.
+     */
+    private void addItem(final String theName, final String theCategory) {
+        mMenu.add(new Item(theName, theCategory));
+        initializeRecyclerView();
     }
 }
