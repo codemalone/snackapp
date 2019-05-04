@@ -288,17 +288,38 @@ public class MainActivity extends AppCompatActivity implements MenuItemFragment.
     private void addItem(final String theName, final String theCategory) {
         Item newItem = new Item(theName, theCategory);
 
-        // check current category state
-        CheckBox veggieCheckBox = findViewById(R.id.checkbox_category_veggie);
-        CheckBox nonVeggieCheckBox = findViewById(R.id.checkbox_category_non_veggie);
-
-        if (theCategory.equals(veggieCheckBox.getText().toString())) {
-            newItem.isVisible = veggieCheckBox.isChecked();
+        if (mMenu.contains(newItem)) {
+            showDuplicateError(newItem.name);
         } else {
-            newItem.isVisible = nonVeggieCheckBox.isChecked();
-        }
+            // check current category state
+            CheckBox veggieCheckBox = findViewById(R.id.checkbox_category_veggie);
+            CheckBox nonVeggieCheckBox = findViewById(R.id.checkbox_category_non_veggie);
 
-        mMenu.add(newItem);
-        initializeRecyclerView();
+            if (theCategory.equals(veggieCheckBox.getText().toString())) {
+                newItem.isVisible = veggieCheckBox.isChecked();
+            } else {
+                newItem.isVisible = nonVeggieCheckBox.isChecked();
+            }
+
+            mMenu.add(newItem);
+            initializeRecyclerView();
+        }
+    }
+
+    /**
+     * Displays an error dialog indicating that item names must be unique.
+     */
+    private void showDuplicateError(String theItemName) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                //user acknowledge error
+                dialog.dismiss();
+            }
+        });
+
+        builder.setTitle("Add Item Failed");
+        builder.setMessage("An item named " + theItemName + " already exists.");
+        builder.create().show();
     }
 }
