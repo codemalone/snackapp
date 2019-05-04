@@ -287,17 +287,6 @@ public class MainActivity extends AppCompatActivity implements MenuItemFragment.
      */
     private void addItem(final String theName, final String theCategory) {
         Item newItem = new Item(theName, theCategory);
-
-        // check current category state
-        CheckBox veggieCheckBox = findViewById(R.id.checkbox_category_veggie);
-        CheckBox nonVeggieCheckBox = findViewById(R.id.checkbox_category_non_veggie);
-
-        if (theCategory.equals(veggieCheckBox.getText().toString())) {
-            newItem.isVisible = veggieCheckBox.isSelected();
-        } else {
-            newItem.isVisible = nonVeggieCheckBox.isSelected();
-        }
-
         mMenu.add(newItem);
         initializeRecyclerView();
     }
