@@ -152,8 +152,6 @@ public class MainActivity extends AppCompatActivity implements MenuItemFragment.
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-
-            // TODO: call method to display dialog for adding new menu item.
             showAddItemDialog();
         }
 
@@ -255,7 +253,6 @@ public class MainActivity extends AppCompatActivity implements MenuItemFragment.
 
         builder.setPositiveButton(R.string.button_add_item_save, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                // User clicked OK button
                 RadioGroup group = v.findViewById(R.id.dialog_add_item_group);
                 final int selected = group.getCheckedRadioButtonId();
 
@@ -311,10 +308,11 @@ public class MainActivity extends AppCompatActivity implements MenuItemFragment.
      */
     private void showDuplicateError(String theItemName) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(R.string.dialog_error_try_again, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                //user acknowledge error
+                //user wants to try again
                 dialog.dismiss();
+                showAddItemDialog();
             }
         });
 
